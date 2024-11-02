@@ -7,6 +7,7 @@ from aiogram.filters.command import Command
 import config
 from keyboards import kb1, kb2
 from random_fox import fox
+from random import randint
 
 
 API_TOKEN = config.token
@@ -28,11 +29,6 @@ async def send_welcome(message: types.Message):
     await message.answer(f"Hello")
 
 
-@dp.message(Command("continue"))
-async def command_continue(message: types.Message):
-    await message.answer(f"Good!")
-
-
 @dp.message(Command("fox"))
 @dp.message(Command("лиса"))
 @dp.message(Command("лису"))
@@ -45,16 +41,6 @@ async def cmd_fox(message: types.Message):
     # await bot.send_photo(message.from_user.id, photo=img_fox)
 
 
-@dp.message(Command("ваше_имя"))
-async def send_username(message: types.Message):
-    await message.answer(f"admin")
-
-
-@dp.message(Command("вход"))
-async def send_enter(message: types.Message):
-    await message.answer(f"выполнен")
-
-
 @dp.message(Command("вход"))
 async def send_enter(message: types.Message):
     await message.answer(f"выполнен")
@@ -62,6 +48,24 @@ async def send_enter(message: types.Message):
 @dp.message(Command("выход"))
 async def send_exit(message: types.Message):
     await message.answer(f"выполняется")
+
+@dp.message(F.text.lower() == 'num')
+async def send_random(message: types.Message):
+    number = randint(1, 10)
+    await message.answer(f"{number}")
+
+
+@dp.message(F.text)
+async def echo(message: types.Message):
+    if "ура" in message.text.lower():
+        await message.answer(F"Good!")
+    elif message.text == "инфо":
+
+        user_name = message.chat.id
+        print(user_name)
+        await message.answer(str(user_name))
+    else:
+        await message.answer(message.text)
 
 
 @dp.message(F.text)
@@ -90,4 +94,3 @@ async def main():
 
 if __name__ == '__main__':
     asyncio.run(main())
-    
